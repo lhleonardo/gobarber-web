@@ -1,18 +1,34 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { shade } from 'polished';
 
-export const Container = styled.div`
+interface ContainerProps {
+  filled: boolean;
+  focused: boolean;
+}
+
+export const Container = styled.div<ContainerProps>`
   display: flex;
   align-items: center;
 
-  border: 2px solid #232129;
   border-radius: 10px;
-
   background: #232129;
 
-  &:hover {
-    background: ${shade(0.7, '#232129')};
-  }
+  border: 2px solid #232129;
+  color: #666360;
+
+  ${props =>
+    props.focused &&
+    css`
+      color: #ff9000;
+      border: 2px solid #ff9000;
+    `}
+
+  ${props =>
+    props.filled &&
+    css`
+      color: #ff9000;
+    `}
+
 
   & + div {
     margin-top: 8px;
@@ -35,6 +51,5 @@ export const Container = styled.div`
 
   svg {
     margin-left: 16px;
-    color: #666360;
   }
 `;
