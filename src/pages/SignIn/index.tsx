@@ -8,7 +8,7 @@ import Input from '../../components/Input';
 
 import { Container, Content, Background } from './styles';
 
-const Login: React.FC = () => (
+const SignIn: React.FC = () => (
   <Container>
     <Content>
       <img src={logo} alt="Logomarca da aplicação" />
@@ -36,4 +36,4 @@ const Login: React.FC = () => (
   </Container>
 );
 
-export default Login;
+export default SignIn;
