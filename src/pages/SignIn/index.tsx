@@ -11,26 +11,42 @@ import Input from '../../components/Input';
 
 import { Container, Content, Background } from './styles';
 import extractValidationMessage from '../../utils/extractValidationMessage';
+import { useAuth } from '../../context/AuthContext';
+
+interface SignInFormData {
+  email: string;
+  password: string;
+}
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const handleSubmit = useCallback(async (data: object) => {
-    try {
-      formRef.current?.setErrors({});
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .email('E-mail inválido')
-          .required('E-mail obrigatório'),
-        password: Yup.string().required(
-          'Senha obrigatória com grande mensagem de erro',
-        ),
-      });
 
-      const validated = await schema.validate(data, { abortEarly: false });
-    } catch (err) {
-      formRef.current?.setErrors(extractValidationMessage(err));
-    }
-  }, []);
+  const { signIn, user } = useAuth();
+
+  const handleSubmit = useCallback(
+    async (data: SignInFormData) => {
+      try {
+        formRef.current?.setErrors({});
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .email('E-mail inválido')
+            .required('E-mail obrigatório'),
+          password: Yup.string().required(
+            'Senha obrigatória com grande mensagem de erro',
+          ),
+        });
+
+        await schema.validate(data, { abortEarly: false });
+
+        signIn({ email: data.email, password: data.password });
+      } catch (err) {
+        formRef.current?.setErrors(extractValidationMessage(err));
+      }
+    },
+    [signIn],
+  );
+
+  console.log(user);
   return (
     <Container>
       <Content>
