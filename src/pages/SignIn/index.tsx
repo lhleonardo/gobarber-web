@@ -12,6 +12,7 @@ import Input from '../../components/Input';
 import { Container, Content, Background } from './styles';
 import extractValidationMessage from '../../utils/extractValidationMessage';
 import { useAuth } from '../../hooks/AuthContext';
+import { useToast } from '../../hooks/ToastContext';
 
 interface SignInFormData {
   email: string;
@@ -20,8 +21,8 @@ interface SignInFormData {
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-
-  const { signIn, user } = useAuth();
+  const { addToast } = useToast();
+  const { signIn } = useAuth();
 
   const handleSubmit = useCallback(
     async (data: SignInFormData) => {
@@ -38,15 +39,22 @@ const SignIn: React.FC = () => {
 
         await schema.validate(data, { abortEarly: false });
 
-        signIn({ email: data.email, password: data.password });
+        await signIn({ email: data.email, password: data.password });
       } catch (err) {
-        formRef.current?.setErrors(extractValidationMessage(err));
+        if (err instanceof Yup.ValidationError) {
+          formRef.current?.setErrors(extractValidationMessage(err));
+        } else {
+          addToast({
+            title: 'Erro na autenticação',
+            type: 'error',
+            description: 'Usuário e/ou senha incorretos.',
+          });
+        }
       }
     },
-    [signIn],
+    [addToast, signIn],
   );
 
-  console.log(user);
   return (
     <Container>
       <Content>
