@@ -3,12 +3,15 @@ import styled from 'styled-components';
 import { shade } from 'polished';
 
 import background from '../../assets/sign-in-background.png';
+import { appearFromRight, appearFromLeft } from '../../styles/animations';
 
 export const Container = styled.div`
   display: flex;
   align-items: stretch;
 
   height: 100vh;
+
+  overflow-x: hidden;
 `;
 
 export const Content = styled.section`
@@ -20,6 +23,13 @@ export const Content = styled.section`
 
   align-items: center;
   justify-content: center;
+`;
+
+export const AnimationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  animation: ${appearFromLeft} 800ms;
 
   form {
     text-align: center;
@@ -67,4 +77,6 @@ export const Background = styled.div`
   flex: 1;
   background: url(${background}) no-repeat center;
   background-size: cover;
+
+  animation: ${appearFromRight} 1s;
 `;

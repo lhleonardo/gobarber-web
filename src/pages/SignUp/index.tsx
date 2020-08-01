@@ -4,7 +4,8 @@ import { FiUser, FiMail, FiLock, FiArrowLeft } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
-import { Container, Background, Content } from './styles';
+import { Link } from 'react-router-dom';
+import { Container, Background, Content, AnimationContainer } from './styles';
 
 import logo from '../../assets/logo.svg';
 import Input from '../../components/Input';
@@ -24,7 +25,7 @@ const SignUp: React.FC = () => {
         password: Yup.string().min(6, 'Senha precisa ter 6 caracteres'),
       });
 
-      const validation = await schema.validate(data, { abortEarly: false });
+      await schema.validate(data, { abortEarly: false });
     } catch (err) {
       const messages = extractValidationMessage(err);
       formRef.current?.setErrors(messages);
@@ -35,31 +36,38 @@ const SignUp: React.FC = () => {
     <Container>
       <Background />
       <Content>
-        <img src={logo} alt="Logomarca do GoBarber" />
+        <AnimationContainer>
+          <img src={logo} alt="Logomarca do GoBarber" />
 
-        <Form ref={formRef} onSubmit={handleOnSubmit}>
-          <h3>Faça seu cadastro</h3>
+          <Form ref={formRef} onSubmit={handleOnSubmit}>
+            <h3>Faça seu cadastro</h3>
 
-          <Input
-            icon={FiUser}
-            name="name"
-            type="text"
-            placeholder="Nome completo"
-          />
-          <Input icon={FiMail} name="email" type="email" placeholder="E-mail" />
-          <Input
-            icon={FiLock}
-            name="password"
-            type="password"
-            placeholder="Senha"
-          />
-          <Button type="submit">Cadastrar</Button>
-        </Form>
+            <Input
+              icon={FiUser}
+              name="name"
+              type="text"
+              placeholder="Nome completo"
+            />
+            <Input
+              icon={FiMail}
+              name="email"
+              type="email"
+              placeholder="E-mail"
+            />
+            <Input
+              icon={FiLock}
+              name="password"
+              type="password"
+              placeholder="Senha"
+            />
+            <Button type="submit">Cadastrar</Button>
+          </Form>
 
-        <a href="voltar">
-          <FiArrowLeft size={20} />
-          Voltar para autenticação
-        </a>
+          <Link to="/">
+            <FiArrowLeft size={20} />
+            Voltar para autenticação
+          </Link>
+        </AnimationContainer>
       </Content>
     </Container>
   );

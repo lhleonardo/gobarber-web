@@ -2,18 +2,23 @@ import styled from 'styled-components';
 
 import { shade } from 'polished';
 import background from '../../assets/sign-up-background.png';
+import { appearFromRight, appearFromLeft } from '../../styles/animations';
 
 export const Container = styled.div`
   display: flex;
   justify-content: stretch;
 
   height: 100vh;
+
+  overflow: hidden;
 `;
 
 export const Background = styled.div`
   flex: 1;
   background: url(${background}) no-repeat center;
   background-size: cover;
+
+  animation: ${appearFromLeft} 500ms;
 `;
 
 export const Content = styled.div`
@@ -25,6 +30,15 @@ export const Content = styled.div`
 
   width: 100%;
   max-width: 700px;
+`;
+
+export const AnimationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  animation: ${appearFromRight} 500ms;
 
   form {
     text-align: center;
@@ -33,6 +47,7 @@ export const Content = styled.div`
 
     h3 {
       margin-bottom: 16px;
+      font-size: 2px;
     }
   }
 
