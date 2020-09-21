@@ -14,7 +14,7 @@ interface ToastProps {
 export const Toast: React.FC<ToastProps> = ({ message, style }) => {
   const { removeToast } = useToast();
   useEffect(() => {
-    const time = setTimeout(() => removeToast(message.id), 3000);
+    const time = setTimeout(() => removeToast(message.id), 5000);
 
     return () => {
       clearTimeout(time);
@@ -25,7 +25,7 @@ export const Toast: React.FC<ToastProps> = ({ message, style }) => {
     <Container
       style={style}
       type={message.type}
-      hasDescription={!!message.description}
+      discriminated={message.description ? 1 : 0}
     >
       <FiAlertCircle size={20} />
 

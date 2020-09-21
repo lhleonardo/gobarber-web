@@ -4,7 +4,7 @@ import { animated } from 'react-spring';
 
 interface ContainerProps {
   type?: 'info' | 'success' | 'warning' | 'error';
-  hasDescription: boolean;
+  discriminated: number;
 }
 
 const toastAppearences = {
@@ -26,7 +26,7 @@ const toastAppearences = {
   `,
 };
 
-export const Container = styled(animated.div) <ContainerProps>`
+export const Container = styled(animated.div)<ContainerProps>`
   width: 380px;
   padding: 16px 30px 16px 16px;
   border-radius: 15px;
@@ -69,7 +69,7 @@ export const Container = styled(animated.div) <ContainerProps>`
   }
 
   ${props =>
-    !props.hasDescription &&
+    !props.discriminated &&
     css`
       align-items: center;
 
