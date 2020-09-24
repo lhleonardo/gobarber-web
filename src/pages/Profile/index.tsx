@@ -40,6 +40,14 @@ const schema = Yup.object().shape({
     .oneOf([Yup.ref('password'), undefined], 'As senhas não coincidem'),
 });
 
+interface IProfileFormData {
+  name: string;
+  email: string;
+  oldPassword?: string;
+  password?: string;
+  confirmPassword?: string;
+}
+
 const Profile: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
@@ -49,11 +57,40 @@ const Profile: React.FC = () => {
 
   const { addToast } = useToast();
 
-  const handleOnSubmit = useCallback(async data => {
+  const handleOnSubmit = useCallback(async (data: IProfileFormData) => {
     try {
       formRef.current?.setErrors({});
       await schema.validate(data, { abortEarly: false });
+
+      let userData: IProfileFormData;
+
+      if (data.oldPassword) {
+        userData = data;
+      } else {
+        userData = {
+          name: data.name,
+          email: data.email,
+        };
+      }
+
+      const response = await api.put('/profile', userData);
+      updateUser(response.data);
+
+      addToast({
+        type: 'success',
+        title: 'Tudo pronto!',
+        description: 'Dados de perfil foram atualizados.',
+      });
     } catch (err) {
+      if (err.response) {
+        addToast({
+          type: 'error',
+          title: 'Falha ao gravar as informações',
+          description: err.response.data.message,
+        });
+
+        return;
+      }
       const messages = extractValidationMessage(err);
       formRef.current?.setErrors(messages);
     }
@@ -61,24 +98,36 @@ const Profile: React.FC = () => {
 
   const handleChangeAvatar = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
-      if (event.target.files) {
-        const data = new FormData();
+      try {
+        if (event.target.files) {
+          const data = new FormData();
 
-        data.append('avatar', event.target.files[0]);
+          data.append('avatar', event.target.files[0]);
 
-        const result = await api.patch('/users/avatar', data);
+          const result = await api.patch('/users/avatar', data);
 
-        updateUser(result.data);
+          updateUser(result.data);
 
+          addToast({
+            type: 'success',
+            title: 'Tudo pronto!',
+            description: 'O seu avatar foi atualizado com sucesso.',
+          });
+        }
+      } catch (error) {
         addToast({
-          type: 'success',
-          title: 'Tudo pronto!',
-          description: 'O seu avatar foi atualizado com sucesso.',
+          type: 'error',
+          title: 'Oops! Algo aconteceu.',
+          description:
+            'Não foi possível atualizar seu avatar. Tente mais tarde.',
         });
+
+        console.error(error);
       }
     },
     [],
   );
+
   return (
     <Container>
       <Header>
