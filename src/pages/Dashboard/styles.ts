@@ -1,7 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { fade } from '../../styles/animations';
 
 import { shade } from 'polished';
+
+interface IAppointmentProps {
+  isPast: boolean;
+}
 
 export const Header = styled.header`
   width: 100%;
@@ -167,7 +171,23 @@ export const Section = styled.section`
   }
 `;
 
-export const Appointment = styled.div`
+export const NoAppointments = styled.div`
+  display: flex;
+  align-items: center;
+
+  margin-top: 24px;
+
+  img {
+    opacity: 0.7;
+    height: 55px;
+  }
+
+  span {
+    margin-left: 16px;
+  }
+`;
+
+export const Appointment = styled.div<IAppointmentProps>`
   display: flex;
   align-items: center;
   color: #f4ede8;
@@ -201,6 +221,12 @@ export const Appointment = styled.div`
   & + div {
     margin-top: 16px;
   }
+
+  ${props =>
+    props.isPast &&
+    css`
+      opacity: 0.3;
+    `}
 `;
 
 export const Calendar = styled.aside`
