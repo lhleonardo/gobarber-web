@@ -1,5 +1,6 @@
 import React, {
   InputHTMLAttributes,
+  CSSProperties,
   useRef,
   useEffect,
   useCallback,
@@ -13,10 +14,16 @@ import { Container, Error } from './styles';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
+  containerStyle?: CSSProperties;
   icon?: React.ComponentType<IconBaseProps>;
 }
 
-const Input: React.FC<InputProps> = ({ name, icon: Icon, ...props }) => {
+const Input: React.FC<InputProps> = ({
+  name,
+  containerStyle = {},
+  icon: Icon,
+  ...props
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [focused, setFocused] = useState(false);
@@ -39,7 +46,12 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...props }) => {
   }, []);
 
   return (
-    <Container focused={focused} filled={filled} hasError={!!error}>
+    <Container
+      style={containerStyle}
+      focused={focused}
+      filled={filled}
+      hasError={!!error}
+    >
       {Icon && <Icon size={20} />}
       <input
         autoComplete="false"

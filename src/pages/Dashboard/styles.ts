@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { fade } from '../../styles/animations';
 
-import { shade } from 'polished';
+import { shade, lighten } from 'polished';
 
 interface IAppointmentProps {
   isPast: boolean;
@@ -24,7 +24,7 @@ export const HeaderContent = styled.div`
   margin: 0 auto;
 
   > img {
-    width: 80px;
+    width: 130px;
   }
 
   button {
@@ -41,6 +41,11 @@ export const LoggedUserInfo = styled.div`
 
   margin-left: 64px;
 
+  border: 2px solid #3e3b47;
+  border-radius: 10px;
+  padding: 8px 16px;
+
+  cursor: pointer;
   > img {
     width: 56px;
     height: 56px;
@@ -62,6 +67,10 @@ export const LoggedUserInfo = styled.div`
     strong {
       color: #ff9000;
     }
+  }
+
+  &:hover {
+    background-color: ${lighten(0.1, '#28262e')};
   }
 `;
 

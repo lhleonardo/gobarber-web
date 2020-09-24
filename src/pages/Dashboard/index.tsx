@@ -26,6 +26,7 @@ import 'react-day-picker/lib/style.css';
 import api from '../../services/api';
 import { isToday, format, parseISO, isBefore } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useHistory } from 'react-router-dom';
 
 interface IMonthAvailability {
   day: number;
@@ -58,6 +59,8 @@ const Dashboard: React.FC = () => {
   const [monthAvailability, setMonthAvailability] = useState<
     IMonthAvailability[]
   >([]);
+
+  const history = useHistory();
 
   // carrega os dias do mês
   useEffect(() => {
@@ -115,6 +118,10 @@ const Dashboard: React.FC = () => {
     setSelectedMonth(month);
   }, []);
 
+  const handleShowProfile = useCallback(() => history.push('/profile'), [
+    history,
+  ]);
+
   const invalidDays = useMemo(() => {
     const dates = monthAvailability
       .filter(day => day.available === false)
@@ -128,7 +135,6 @@ const Dashboard: React.FC = () => {
         return date;
       });
 
-    console.log(dates);
     return dates;
   }, [monthAvailability, selectedMonth]);
 
@@ -177,10 +183,10 @@ const Dashboard: React.FC = () => {
         <HeaderContent>
           <img src={logoImage} alt="Logomarca da aplicação" />
 
-          <LoggedUserInfo>
+          <LoggedUserInfo onClick={handleShowProfile}>
             <img src={user.avatarURL ?? noAvatar} alt="Avatar do usuário" />
             <div>
-              <span>Seja bem-vindo</span>
+              <span>Bem-vindo,</span>
               <strong>{user.name}</strong>
             </div>
           </LoggedUserInfo>
