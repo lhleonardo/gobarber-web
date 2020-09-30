@@ -24,7 +24,7 @@ interface AuthContextData {
 
 interface AuthState {
   token: string;
-  user: object;
+  user: UserAPI;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);

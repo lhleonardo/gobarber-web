@@ -1,6 +1,6 @@
+import React, { ChangeEvent, useCallback, useRef } from 'react';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
-import React, { ChangeEvent, useCallback, useRef } from 'react';
 import { FiArrowLeft, FiUser, FiMail, FiLock, FiCamera } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -57,44 +57,47 @@ const Profile: React.FC = () => {
 
   const { addToast } = useToast();
 
-  const handleOnSubmit = useCallback(async (data: IProfileFormData) => {
-    try {
-      formRef.current?.setErrors({});
-      await schema.validate(data, { abortEarly: false });
+  const handleOnSubmit = useCallback(
+    async (data: IProfileFormData) => {
+      try {
+        formRef.current?.setErrors({});
+        await schema.validate(data, { abortEarly: false });
 
-      let userData: IProfileFormData;
+        let userData: IProfileFormData;
 
-      if (data.oldPassword) {
-        userData = data;
-      } else {
-        userData = {
-          name: data.name,
-          email: data.email,
-        };
-      }
+        if (data.oldPassword) {
+          userData = data;
+        } else {
+          userData = {
+            name: data.name,
+            email: data.email,
+          };
+        }
 
-      const response = await api.put('/profile', userData);
-      updateUser(response.data);
+        const response = await api.put('/profile', userData);
+        updateUser(response.data);
 
-      addToast({
-        type: 'success',
-        title: 'Tudo pronto!',
-        description: 'Dados de perfil foram atualizados.',
-      });
-    } catch (err) {
-      if (err.response) {
         addToast({
-          type: 'error',
-          title: 'Falha ao gravar as informações',
-          description: err.response.data.message,
+          type: 'success',
+          title: 'Tudo pronto!',
+          description: 'Dados de perfil foram atualizados.',
         });
+      } catch (err) {
+        if (err.response) {
+          addToast({
+            type: 'error',
+            title: 'Falha ao gravar as informações',
+            description: err.response.data.message,
+          });
 
-        return;
+          return;
+        }
+        const messages = extractValidationMessage(err);
+        formRef.current?.setErrors(messages);
       }
-      const messages = extractValidationMessage(err);
-      formRef.current?.setErrors(messages);
-    }
-  }, []);
+    },
+    [addToast, updateUser],
+  );
 
   const handleChangeAvatar = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
@@ -121,11 +124,9 @@ const Profile: React.FC = () => {
           description:
             'Não foi possível atualizar seu avatar. Tente mais tarde.',
         });
-
-        console.error(error);
       }
     },
-    [],
+    [addToast, updateUser],
   );
 
   return (
@@ -147,6 +148,7 @@ const Profile: React.FC = () => {
           <AvatarInput>
             <img
               src={user.avatarURL ?? noAvatar}
+              alt="Avatar do usuário"
               onClick={() => inputAvatarRef.current?.click()}
             />
             <label htmlFor="avatar">
