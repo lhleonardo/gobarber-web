@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FiClock, FiPower } from 'react-icons/fi';
 
+import DayPicker, { DayModifiers } from 'react-day-picker';
+import { isToday, format, parseISO, isBefore } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { useHistory } from 'react-router-dom';
 import {
   Header,
   HeaderContent,
@@ -20,13 +24,9 @@ import noAvatar from '../../assets/no-avatar.png';
 import waiting from '../../assets/icons/waiting.svg';
 
 import { useAuth } from '../../hooks/AuthContext';
-import DayPicker, { DayModifiers } from 'react-day-picker';
 
 import 'react-day-picker/lib/style.css';
 import api from '../../services/api';
-import { isToday, format, parseISO, isBefore } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { useHistory } from 'react-router-dom';
 
 interface IMonthAvailability {
   day: number;
@@ -220,7 +220,8 @@ const Dashboard: React.FC = () => {
                 </div>
 
                 <span>
-                  <FiClock /> {nextAppointment.formattedHour}
+                  <FiClock />
+                  {nextAppointment.formattedHour}
                 </span>
               </NextAppointment>
             </>
@@ -237,7 +238,8 @@ const Dashboard: React.FC = () => {
             {morningAppointments.map(appointment => (
               <Appointment isPast={appointment.isPast} key={appointment.id}>
                 <span>
-                  <FiClock /> {appointment.formattedHour}
+                  <FiClock />
+                  {appointment.formattedHour}
                 </span>
                 <div>
                   <img
@@ -261,7 +263,8 @@ const Dashboard: React.FC = () => {
             {afternoonAppointments.map(appointment => (
               <Appointment isPast={appointment.isPast} key={appointment.id}>
                 <span>
-                  <FiClock /> {appointment.formattedHour}
+                  <FiClock />
+                  {appointment.formattedHour}
                 </span>
                 <div>
                   <img
@@ -298,7 +301,7 @@ const Dashboard: React.FC = () => {
             disabledDays={[{ daysOfWeek: [0, 6] }, ...invalidDays]}
             modifiers={{ available: { daysOfWeek: [1, 2, 3, 4, 5] } }}
             onDayClick={handleDateChange}
-          ></DayPicker>
+          />
         </Calendar>
       </Content>
     </>

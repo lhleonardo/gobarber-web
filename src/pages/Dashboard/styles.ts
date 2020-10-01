@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
-import { fade } from '../../styles/animations';
-
 import { shade, lighten } from 'polished';
+import { fade } from '../../styles/animations';
 
 interface IAppointmentProps {
   isPast: boolean;
@@ -76,9 +75,7 @@ export const LoggedUserInfo = styled.div`
 
 export const Content = styled.main`
   max-width: 1120px;
-  margin: 0 auto;
-
-  margin-top: 32px;
+  margin: 32px auto;
 
   display: flex;
   flex-direction: row;
